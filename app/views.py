@@ -49,20 +49,21 @@ class Register_view(View):
         return render(req, 'register.html', {'form': form})
     
 class Login_View(View):
-    def login_user(request):
-        if request.method == "POST":
-            form = LoginForm(request, data=request.POST)
-            if form.is_valid():
-                username = form.cleaned_data.get('username')
-                password = form.cleaned_data.get('password')
-                user = authenticate(request, username=username, password=password)
-                if user is not None:
-                    login(request, user)
-                    return redirect('list_view')
-        else:
-            form = LoginForm(request)
+    def get(self, request):
+        form = AuthenticationForm()
+        return render(request, "login.html", {"form": form})
 
-        return render(request, "login.html", {"form": form})         
+    def post(self, request):
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('list_view')
+        return render(request, "login.html", {"form": form})  
+          
 class Log_Out_View(View):
     def log_out(req):
         logout(req)
