@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+  body { font-family: Arial, sans-serif; background:#f3f4f6; }
+  .center-wrap {
+    min-height: 60vh; display:flex; align-items:center; justify-content:center;
+    padding:40px 16px;
+  }
+  .auth-card {
+    max-width:800px; width:100%;
+    background:white; border-radius:12px;
+    box-shadow:0 8px 30px rgba(0,0,0,0.08);
+    display:grid; grid-template-columns:1fr 320px; overflow:hidden;
+  }
+  .auth-info { padding:30px; background:#f8fafc; }
+  .auth-info h2 { margin:0 0 10px; font-size:22px; color:#0f172a; }
+  .auth-info p { margin:0 0 16px; color:#334155; line-height:1.5; }
+  .features { margin-top:12px; }
+  .feature { margin-bottom:8px; color:#475569; font-size:14px; }
+  .auth-actions { padding:30px; display:flex; flex-direction:column; gap:12px; }
+  .auth-actions h3 { margin:0; font-size:18px; color:#0f172a; }
+  .auth-actions p { margin:0 0 12px; color:#64748b; font-size:14px; }
+  .btn {
+    display:inline-block; padding:10px 16px; border-radius:8px;
+    font-weight:bold; text-decoration:none; text-align:center;
+  }
+  .btn-primary { background:#0ea5a4; color:white; }
+  .btn-outline { border:1px solid #cbd5e1; color:#0f172a; }
+  .links-row { margin-top:10px; font-size:14px; }
+  .links-row a { margin-left:8px; color:#0ea5a4; text-decoration:none; }
+  @media(max-width:768px){ .auth-card { grid-template-columns:1fr; } }
+</style>
+
+<div class="center-wrap">
+  <div class="auth-card">
+    
+    <div class="auth-actions">
+      <h3>Ro'yxatdan o'tish yoki kirish</h3>
+      <p>Agar yangi foydalanuvchi bo'lsangiz — “Register” tugmasini bosing. Mavjud hisob bilan kirish uchun “Login”.</p>
+      <div>
+        <a class="btn btn-primary" href="{% url 'register_page' %}">Register</a>
+        <a class="btn btn-outline" href="{% url 'login_page' %}">Login</a>
+      </div>
+      <div class="links-row">
+        Yordam:
+        <a href="#">Parolni unutdingizmi?</a>
+        <a href="#">Bog'lanish</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

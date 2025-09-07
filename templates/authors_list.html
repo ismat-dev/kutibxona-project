@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block content %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm mb-5">
+  <div class="container">
+    <a class="navbar-brand fw-bold text-white" href="/">📚 MyLibrary</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto">
+        {% if user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link text-white" href="{% url 'create_author' %}">➕ Author</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white" href="{% url 'create_books' %}">➕ Add Book</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white" href="{% url 'books' %}">📚 All Books</a>
+          </li>
+        {% endif %}
+      </ul>
+
+      <div class="d-flex">
+        {% if user.is_authenticated %}
+          <span class="navbar-text me-3 text-white">
+            👋 Hello, {{ user.username }}
+          </span>
+          <a class="btn btn-sm btn-light text-danger fw-bold" href="{% url 'log_out_page' %}">Log Out</a>
+        {% else %}
+          <a class="btn btn-sm btn-outline-light me-2" href="{% url 'login_page' %}">Login</a>
+          <a class="btn btn-sm btn-warning" href="{% url 'register_page' %}">Register</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</nav>
+
+<h2 class="text-center mb-5 text-primary fw-bold">Authors</h2>
+<form method="GET" class="d-flex justify-content-center mb-4">
+  {{ form.as_p }}
+  <button class="btn btn-primary ms-2">Search</button>
+</form>
+
+<div class="row g-4">
+  {% for author in authors %}
+  <div class="col-12 col-md-6 col-lg-4">
+    <div class="card h-100 shadow-sm border-0 hover-shadow" style="border-radius: 15px; overflow: hidden;">
+      <img src="{{ author.image.url }}" alt="{{ author.full_name }}" class="card-img-top"
+        style="height: 200px; object-fit: cover;">
+      <div class="card-body d-flex flex-column">
+        <h5 class="card-title mb-2 text-dark fw-bold">{{ author.full_name }}</h5>
+        <p class="card-text text-muted">{{ author.country }}</p>
+        <p><a class="text-primary fw-bold" href="{% url 'update_view' author.id %}">✏️ Update</a></p>
+        <p><a class="text-danger fw-bold" href="{% url 'delete_view' author.id %}">🗑️ Delete</a></p>
+      </div>
+    </div>
+  </div>
+  {% empty %}
+  <div class="col-12 text-center">
+    <p class="text-muted">No authors found.</p>
+  </div>
+  {% endfor %}
+</div>
+
+<div class="pagination mt-4 text-center">
+  <span class="step-links">
+    {% if page_obj.has_previous %}
+    <a class="btn btn-outline-primary btn-sm" href="?page={{ page_obj.previous_page_number }}">⬅️ Previous</a>
+    {% endif %}
+
+    <span class="mx-2 fw-bold">
+      Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+    </span>
+
+    {% if page_obj.has_next %}
+    <a class="btn btn-outline-primary btn-sm" href="?page={{ page_obj.next_page_number }}">Next ➡️</a>
+    {% endif %}
+  </span>
+</div>
+
+<style>
+  .hover-shadow:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+  }
+</style>
+{% endblock %}
