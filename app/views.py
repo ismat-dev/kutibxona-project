@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Author, Book
-from .forms import CreateForm, RegisterForm, LoginForm, SearchForm, CreateBookForm
+from .forms import CreateForm, RegisterForm, SearchForm, CreateBookForm
 from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
@@ -48,21 +48,36 @@ class Register_view(View):
             form = RegisterForm()
         return render(req, 'register.html', {'form': form})
     
-class Login_View(View):
-    def get(self, request):
-        form = AuthenticationForm()
-        return render(request, "login.html", {"form": form})
+# class Login_View(View):
+# def login_user(request):
+#     # form = LoginForm(request.POST)
+#     if form.is_valid():
+#         username = form.cleaned_data.get('username')
+#         password = form.cleaned_data.get('password')
+#         user = authenticate(request, username=username, password=password)
+#         if user is not None:
+#             login(request, user)
+#             return redirect('list_view')
+#     else:
+#         form = LoginForm()
+#     return render(request, "login.html", {"form": form}) 
+# 
 
-    def post(self, request):
-        form = AuthenticationForm(request, data=request.POST)
-        if form.is_valid():
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password')
-            user = authenticate(request, username=username, password=password)
-            if user is not None:
-                login(request, user)
-                return redirect('list_view')
-        return render(request, "login.html", {"form": form})  
+def login_user(req):
+    if req.method == 'POST':
+        username = req.POST['username'] 
+        password = req.POST['password']
+        
+        user = authenticate(req,username=username,password=password)
+
+        if user is not None:
+            login(req,user)
+            return redirect('list_view')
+        else:
+            messages.error(req,'error')
+
+    return render(req,'login.html')
+
           
 class Log_Out_View(View):
     def log_out(req):
